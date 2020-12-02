@@ -1,0 +1,88 @@
+# GENERATED for onap
+
+addon_job_timeout: 60
+dns:
+    provider: coredns
+    upstreamnameservers:
+    - 8.8.8.8
+    - 8.8.4.4
+nodes:
+- address: 192.168.60.92
+  port: "22"
+  internal_address: 192.168.60.92
+  role:
+  - worker
+  hostname_override: "onap-k8s-a2"
+  user: ubuntu
+  ssh_key_path: "/home/ubuntu/.ssh/onap_key"
+- address: 192.168.60.113
+  port: "22"
+  internal_address: 192.168.60.113
+  role:
+  - worker
+  hostname_override: "onap-k8s-02"
+  user: ubuntu
+  ssh_key_path: "/home/ubuntu/.ssh/onap_key"
+  #######
+- address: 192.168.60.104
+  port: "22"
+  internal_address: 192.168.60.104
+  role:
+  - controlplane
+  - etcd
+  hostname_override: "onap-orch-1"
+  user: ubuntu
+  ssh_key_path: "/home/ubuntu/.ssh/onap_key"
+- address: 192.168.60.75
+  port: "22"
+  internal_address: 192.168.60.75
+  role:
+  - controlplane
+  - etcd
+  hostname_override: "nuc5"
+  user: ubuntu
+  ssh_key_path: "/home/ubuntu/.ssh/onap_key"
+#- address: 172.24.4.19
+#  port: "22"
+#  internal_address: 10.0.0.10
+#  role:
+#  - controlplane
+#  - etcd
+#  hostname_override: "onap-orch-3"
+#  user: ubuntu
+#  ssh_key_path: "/home/ubuntu/.ssh/onap_key"
+services:
+  kube-api:
+    service_cluster_ip_range: 10.43.0.0/16
+    pod_security_policy: false
+    always_pull_images: false
+  kube-controller:
+    cluster_cidr: 10.42.0.0/16
+    service_cluster_ip_range: 10.43.0.0/16
+  kubelet:
+    cluster_domain: cluster.local
+    cluster_dns_server: 10.43.0.10
+    fail_swap_on: false
+    extra_args:
+      max-pods: 250
+network:
+  plugin: flannel
+#  options:
+#    calico_cloud_provider: aws
+
+authentication:
+  strategy: x509
+ssh_key_path: "/home/ubuntu/.ssh/onap_key"
+ssh_agent_auth: false
+authorization:
+  mode: rbac
+ignore_docker_version: false
+kubernetes_version: "v1.15.3-rancher1-1"
+private_registries:
+- url:
+  is_default: true
+cluster_name: "onap"
+restore:
+  restore: false
+  snapshot_name: ""
+
